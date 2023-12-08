@@ -14,42 +14,58 @@ button = Pin(16,Pin.IN, Pin.PULL_UP)
 #Set up les moteurs
 
 #moteur 1
-motor1_pin1 = Pin(6, Pin.OUT)
-motor1_pin2 = Pin(7, Pin.OUT)
-EN_A = Pin(8, Pin.OUT)
+motor1_pin1 = Pin(7, Pin.OUT)
+motor1_pin2 = Pin(8, Pin.OUT)
+#EN_A = Pin(8, Pin.OUT)
 
 #moteur 2
 motor2_pin1 = Pin(4, Pin.OUT)
 motor2_pin2 = Pin(3, Pin.OUT)
 EN_B = Pin(2, Pin.OUT)
 
-EN_A.high()
+
 EN_B.high()
+
+def MDAr():
+    motor1_pin1.low()
+    motor1_pin2.high()
+
+def MDA():
+    motor1_pin1.high()
+    motor1_pin2.low()
+
+def MGA():
+    motor2_pin1.low()
+    motor2_pin2.high()
+
+def MGAr():
+    motor2_pin1.high()
+    motor2_pin2.low()
+    
+def Stop():
+    motor1_pin1.low()
+    motor1_pin2.low()
+    motor2_pin1.low()
+    motor2_pin2.low()
+Stop()
+
 
 
 def avancer():
-    motor1_pin1.high()
-    motor1_pin2.low()
-    motor2_pin1.high()
-    motor2_pin2.low()
+    MDA()
+    MGA()
 
 def reculer():
-    motor1_pin1.low()
-    motor1_pin2.high()
-    motor2_pin1.low()
-    motor2_pin2.high()
+    MDAr()
+    MGAr()
 
 def droite():
-    motor1_pin1.high()
-    motor1_pin2.high()
-    motor2_pin1.low()
-    motor2_pin2.low()
-    
+    MGA()
+    MDAr()
+
 def gauche():
-    motor1_pin1.low()
-    motor1_pin2.low()
-    motor2_pin1.high()
-    motor2_pin2.high()
+    MDA()
+    MGAr()
 
 while True:
     xValue = xAxis.read_u16()
@@ -66,23 +82,30 @@ while True:
         print('gauche')
         #time.sleep(0.2)
         
-    if xValue >= 60000:
+    elif xValue >= 60000:
         xStatus = "right"
         droite()
         print('droite')
         #time.sleep(0.2)
         
-    if yValue <= 600:
+    elif yValue <= 600:
         yStatus = "up"
         avancer()
         print('avancer')
         #time.sleep(0.2)
         
-    if yValue >= 60000:
+    elif yValue >= 60000:
         yStatus = "down"
         reculer()
         print('recule')
         #time.sleep(0.2)
+    else:
+        print("stop")
+        Stop()
+    print(xValue)
+    print(yValue)
+    time.sleep(1)
+    
         
 
     
